@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/images"/>
+    <qresource prefix="/">
+        <file alias="doc-open">C:/Users/Chauncy/Pictures/index.jpg</file>
+    </qresource>
+</RCC>

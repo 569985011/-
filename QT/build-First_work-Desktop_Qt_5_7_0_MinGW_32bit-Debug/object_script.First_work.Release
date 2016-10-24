@@ -1,0 +1,12 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\helpevevts.o
+./release\cxtime.o
+./release\qrc_res.o
+./release\moc_mainwindow.o
+./release\moc_newspaper.o
+./release\moc_reader.o
+./release\moc_helpevevts.o
+./release\moc_cxtime.o
+);

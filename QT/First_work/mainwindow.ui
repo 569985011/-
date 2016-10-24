@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>455</width>
+    <height>322</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>455</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu1">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="action1_3"/>
+    <addaction name="action2_3"/>
+    <addaction name="separator"/>
+    <addaction name="action2_4"/>
+    <addaction name="action3_3"/>
+    <addaction name="actionMore"/>
+   </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>联系作者</string>
+    </property>
+    <addaction name="action_2"/>
+    <addaction name="actionBy_E_mail"/>
+    <addaction name="actionBy_Facebook"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>导出</string>
+    </property>
+    <addaction name="actionTXT"/>
+    <addaction name="actionXML"/>
+    <addaction name="actionEXCEL"/>
+   </widget>
+   <addaction name="menu1"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionMore">
+   <property name="text">
+    <string>More</string>
+   </property>
+  </action>
+  <action name="actionBy_E_mail">
+   <property name="text">
+    <string>By Gmail</string>
+   </property>
+  </action>
+  <action name="actionBy_Facebook">
+   <property name="text">
+    <string>By Facebook</string>
+   </property>
+  </action>
+  <action name="action2_3">
+   <property name="text">
+    <string>2.click &quot;Pause&quot; to mark the time</string>
+   </property>
+  </action>
+  <action name="action1_3">
+   <property name="text">
+    <string>1.click &quot;start&quot; to run the clock</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>By QQmail</string>
+   </property>
+  </action>
+  <action name="action3_3">
+   <property name="text">
+    <string>3.save the List over right</string>
+   </property>
+  </action>
+  <action name="action2_4">
+   <property name="text">
+    <string>2.click &quot;stop&quot; to reset the clock</string>
+   </property>
+  </action>
+  <action name="actionDaochu">
+   <property name="text">
+    <string>daochu </string>
+   </property>
+  </action>
+  <action name="actionTXT">
+   <property name="text">
+    <string>TXT</string>
+   </property>
+  </action>
+  <action name="actionXML">
+   <property name="text">
+    <string>XML</string>
+   </property>
+  </action>
+  <action name="actionEXCEL">
+   <property name="text">
+    <string>EXCEL</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

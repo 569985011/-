@@ -1,0 +1,12 @@
+INPUT(
+./debug\main.o
+./debug\mainwindow.o
+./debug\helpevevts.o
+./debug\cxtime.o
+./debug\qrc_res.o
+./debug\moc_mainwindow.o
+./debug\moc_newspaper.o
+./debug\moc_reader.o
+./debug\moc_helpevevts.o
+./debug\moc_cxtime.o
+);

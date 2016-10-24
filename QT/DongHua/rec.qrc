@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>badapple.txt</file>
+    </qresource>
+</RCC>

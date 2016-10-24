@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="Welcome">C:/Users/Chauncy/Pictures/index.jpg</file>
+    </qresource>
+</RCC>
