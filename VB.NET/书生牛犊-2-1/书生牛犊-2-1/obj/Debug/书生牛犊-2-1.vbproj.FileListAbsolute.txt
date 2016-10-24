@@ -1,0 +1,11 @@
+F:\CPP\VB.NET\书生牛犊-2-1\书生牛犊-2-1\bin\Debug\书生牛犊-2-1.exe.config
+F:\CPP\VB.NET\书生牛犊-2-1\书生牛犊-2-1\obj\Debug\WindowsApplication1.Form1.resources
+F:\CPP\VB.NET\书生牛犊-2-1\书生牛犊-2-1\obj\Debug\WindowsApplication1.Resources.resources
+F:\CPP\VB.NET\书生牛犊-2-1\书生牛犊-2-1\obj\Debug\书生牛犊-2-1.vbproj.GenerateResource.Cache
+F:\CPP\VB.NET\书生牛犊-2-1\书生牛犊-2-1\bin\Debug\Resources\KEY04.ICO
+F:\CPP\VB.NET\书生牛犊-2-1\书生牛犊-2-1\bin\Debug\书生牛犊-2-1.exe
+F:\CPP\VB.NET\书生牛犊-2-1\书生牛犊-2-1\bin\Debug\书生牛犊-2-1.pdb
+F:\CPP\VB.NET\书生牛犊-2-1\书生牛犊-2-1\bin\Debug\书生牛犊-2-1.xml
+F:\CPP\VB.NET\书生牛犊-2-1\书生牛犊-2-1\obj\Debug\书生牛犊-2-1.exe
+F:\CPP\VB.NET\书生牛犊-2-1\书生牛犊-2-1\obj\Debug\书生牛犊-2-1.xml
+F:\CPP\VB.NET\书生牛犊-2-1\书生牛犊-2-1\obj\Debug\书生牛犊-2-1.pdb
