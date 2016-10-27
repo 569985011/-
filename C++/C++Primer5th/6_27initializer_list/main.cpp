@@ -4,7 +4,7 @@
 using namespace std;
 
 auto Sum(initializer_list<int> k){
-    double sum=0;
+    int sum=0;
     for(auto i:k)sum+=i;
     return sum;
 }
