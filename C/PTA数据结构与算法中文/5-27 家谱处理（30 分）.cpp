@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include<stdlib.h>
 #include<string.h>
-/* ÆÀ²â½á¹û Ê±¼ä 	½á¹û 	µÃ·Ö 	ÌâÄ¿ 	±àÒëÆ÷ 	ÓÃÊ±£¨ms£© 	ÄÚ´æ£¨MB£© 	ÓÃ»§
-2016-08-30 10:31 	È«²¿ÕıÈ· 	25 	5-27 	gcc 	1 	1 	569985011
-²âÊÔµã½á¹û ²âÊÔµã 	½á¹û 	µÃ·Ö/Âú·Ö 	ÓÃÊ±£¨ms£© 	ÄÚ´æ£¨MB£©
-²âÊÔµã1 	´ğ°¸ÕıÈ· 	18/18 	1 	1
-²âÊÔµã2 	´ğ°¸ÕıÈ· 	2/2 	1 	1
-²âÊÔµã3 	´ğ°¸ÕıÈ· 	5/5 	1 	1
-²âÊÔµã4 	´ğ°¸ÕıÈ· 	5/5 	1 	1
-²é¿´´úÂë*/
+/* è¯„æµ‹ç»“æœ æ—¶é—´ 	ç»“æœ 	å¾—åˆ† 	é¢˜ç›® 	ç¼–è¯‘å™¨ 	ç”¨æ—¶ï¼ˆmsï¼‰ 	å†…å­˜ï¼ˆMBï¼‰ 	ç”¨æˆ·
+2016-08-30 10:31 	å…¨éƒ¨æ­£ç¡® 	25 	5-27 	gcc 	1 	1 	569985011
+æµ‹è¯•ç‚¹ç»“æœ æµ‹è¯•ç‚¹ 	ç»“æœ 	å¾—åˆ†/æ»¡åˆ† 	ç”¨æ—¶ï¼ˆmsï¼‰ 	å†…å­˜ï¼ˆMBï¼‰
+æµ‹è¯•ç‚¹1 	ç­”æ¡ˆæ­£ç¡® 	18/18 	1 	1
+æµ‹è¯•ç‚¹2 	ç­”æ¡ˆæ­£ç¡® 	2/2 	1 	1
+æµ‹è¯•ç‚¹3 	ç­”æ¡ˆæ­£ç¡® 	5/5 	1 	1
+æµ‹è¯•ç‚¹4 	ç­”æ¡ˆæ­£ç¡® 	5/5 	1 	1
+æŸ¥çœ‹ä»£ç */
 typedef struct node *Node;
 struct node {
 	char Name[11];
@@ -21,9 +21,9 @@ int n;
 
 int Scan(char*);
 int Trace(int);
-int judgeParent(int,int);//¸¸×Ó
-int judgeSibling(int,int);//ĞÖµÜ
-int judgeAncestor(int,int);//×æÏÈ
+int judgeParent(int,int);//çˆ¶å­
+int judgeSibling(int,int);//å…„å¼Ÿ
+int judgeAncestor(int,int);//ç¥–å…ˆ
 void work();
 int Index(char*);
 
@@ -31,7 +31,7 @@ int main() {
 	int m;
 	scanf("%d%d",&n,&m);
 	Tree=(Node)malloc(sizeof(struct node)*n);
-	getchar();//Çå³ı»º´æ
+	getchar();//æ¸…é™¤ç¼“å­˜
 	for(int i=0; i<n; i++) {
 		Tree[i].space=Scan(Tree[i].Name);
 		Tree[i].Parant=i;
@@ -96,7 +96,7 @@ void work() {
 
 	if(result==1)printf("True\n");
 	else if(!result)printf("False\n");
-//	else printf("ERROR:ÏµÍ³²»ÄÜÊ¶±ğËùÖ¸¶¨¹ØÏµ£¡\n");
+//	else printf("ERROR:ç³»ç»Ÿä¸èƒ½è¯†åˆ«æ‰€æŒ‡å®šå…³ç³»ï¼\n");
 }
 
 
@@ -105,11 +105,11 @@ int Index(char*a) {
 //		printf("*");
 		if(strcmp(Tree[i].Name,a)==0)return i;
 	}
-// 	printf("ERROR:Ëù¸øÈËÃû²»´æÔÚ£¡\n");
+// 	printf("ERROR:æ‰€ç»™äººåä¸å­˜åœ¨ï¼\n");
 	return -1;
 }
 
-int Trace(int child) { //ÍùÇ°±éÀúµÚÒ»¸ö±ÈËûËõ½øÉÙµÄ¾ÍÊÇËûµÄ¸¸Ç×
+int Trace(int child) { //å¾€å‰éå†ç¬¬ä¸€ä¸ªæ¯”ä»–ç¼©è¿›å°‘çš„å°±æ˜¯ä»–çš„çˆ¶äº²
 
 	for(int i=child-1; i>=0; i--) {
 		if(Tree[i].space<Tree[child].space) {
@@ -117,14 +117,14 @@ int Trace(int child) { //ÍùÇ°±éÀúµÚÒ»¸ö±ÈËûËõ½øÉÙµÄ¾ÍÊÇËûµÄ¸¸Ç×
 			return i;
 		}
 	}
-	return -1;//Èç¹ûÃ»ÓĞ£¬ÄÇÃ´Ëû¾ÍÊÇÑÇµ±ÏÄÍŞÁË¡£
+	return -1;//å¦‚æœæ²¡æœ‰ï¼Œé‚£ä¹ˆä»–å°±æ˜¯äºšå½“å¤å¨ƒäº†ã€‚
 }
 
 int Scan(char*p) {
 	char c;
 	int space=0;
 
-	while((c=getchar())==' ')space++;//¼ÇÂ¼×Ö·û´®Ç°ÃæµÄ¿Õ¸ñÊıÁ¿
+	while((c=getchar())==' ')space++;//è®°å½•å­—ç¬¦ä¸²å‰é¢çš„ç©ºæ ¼æ•°é‡
 
 	do {
 		*p++=c;
