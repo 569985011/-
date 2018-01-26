@@ -1,120 +1,160 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define Big(a,n) ((a)>(b))?(a):(b)
-/*平台不支持使用stricmp.*/
-/* 评测结果 时间 	结果 	得分 	题目 	编译器 	用时（ms） 	内存（MB） 	用户
-2016-08-30 14:51 	部分正确 	26 	5-44 	gcc 	2 	1 	569985011
-测试点结果 测试点 	结果 	得分/满分 	用时（ms） 	内存（MB）
-测试点1 	答案正确 	18/18 	1 	1
-测试点2 	答案正确 	4/4 	2 	1
-测试点3 	答案正确 	2/2 	2 	1
-测试点4 	答案正确 	2/2 	1 	1
-测试点5 	运行超时 	0/4 	0 	0
-查看代码*/
+#define HashLenth 10007  //测试内存开销3MB，也就是不到1MB的数据个数。 
+
+/* 评测结果
+提交时间	状态	分数	题目	编译器	耗时	用户
+2018/1/26 17:49:32	答案正确	30	7-44	C (gcc)	75 ms	569985011
+测试点	提示	结果	耗时	内存
+0	sample	答案正确	2 ms	244KB
+1	同一文件内重复出现的单词不重复计算；太长的单词只考虑前10个字母	答案正确	2 ms	244KB
+2	完全不同	答案正确	2 ms	256KB
+3	完全相同	答案正确	2 ms	152KB
+4	最大N和M；有1个文件包含了全部单词；有1个单词出现在所有文件里	答案正确	75 ms	2032KB*/
 typedef struct node *Node;
 struct node {
-	char*Words;
-//	int Number;//考察的是词汇 量，对于重复的词汇不必要处理
-	Node Next;
+	char*Word;
+	int Reached[101];
+	int Times;
 };
+Node Hash[HashLenth]= {0};
+int Same[101][101]= {0};
+int Sum[101]= {0};
+int n;
 
+int Mod(int);
 char*scan();
-Node Insert(Node,char*);
-void cmp(Node,Node);
+void Insert(int ,char*);
+int HashKey(char*);
+void Refresh(Node,int);
 
 int main() {
-	int n;
 	scanf("%d",&n);
-	Node Head[101]= {0}; //初始化为空
-
-	for(int i=1; i<=n; i++) {
-//		printf("\n--\n");
-		int flag=1;
-		while(flag) {
+	for(int j=0; j<n; j++) {
+		while(1) {
 			char*temp=scan();
-			int len=strlen(temp);
-			if(len==1&&temp[0]=='#')flag=0;
-			else if(len>=3) {
-//				printf("{%s}",temp);
-				Head[i]=Insert(Head[i],temp);
+			if(temp) {
+				if(temp[0]=='#') {
+//					printf("+EOF+");
+					break;
+				}
+				Insert(j+1,temp);
 			}
 		}
-//		Node temp=Head[i];
-//		while(temp) {
-//			printf("[%s]",temp->Words);
-//			temp=temp->Next;
-//		}
 	}
-
 	int m;
 	scanf("%d",&m);
 	while(m--) {
 		int a,b;
 		scanf("%d%d",&a,&b);
-		cmp(Head[a],Head[b]);
-	}
+		if(a==b)printf("100.0%%\n");//测试了老半天才发现这个坑。。。 
+		else
+			printf("%.1f%%\n",Same[a][b]*100.0/(Sum[a]+Sum[b]-Same[a][b]));
 
+	}
 	return 0;
 }
 
-void cmp(Node a,Node b) {
-	if(a&&b) {
-		int Total=0;
-		int Same=0;
-		while(a&&b) {
-			++Total;
-//			printf("{%s-%s}",a->Words,b->Words);
-			int flag=strcmp(a->Words,b->Words);
-			if(!flag) {
-				++Same;
-				a=a->Next;
-				b=b->Next;
-			} else if(flag<0) {
-				a=a->Next;
-			} else {
-				b=b->Next;
-			}
-		}
-		while(a) {
-			++Total;
-			a=a->Next;
-		}
-		while(b) {
-			++Total;
-			b=b->Next;
-		}
-		printf("%.1f%%\n",Same*100.0/Total);
-	} else printf("0.0%%\n");
+void Refresh(Node N,int h) {
+	if(N->Reached[N->Times]==h)return;//同一个文件里面出现的重复单词不累加
+	++Sum[h];//文件词汇量+1
+//	printf("[Used");
+	N->Reached[++N->Times]=h;
+	for(int i=0; i<N->Times; i++) {//所有包含此字符串的文件彼此Same++
+//		printf("*");
+		++Same[N->Reached[i]][h];
+		++Same[h][N->Reached[i]];
+	}
+//	printf("]");
 }
 
-char*scan() {
-	static char temp[11];
-	int i=0;
-	char c;
-	do {
-		c=getchar();
-		if(c>='A'&&c<='Z') {
-			if(i<10)temp[i++]=c+'a'-'A';
-		} else if(c>='a'&&c<='z') {
-			if(i<10)temp[i++]=c;
-		} else if(c=='#') {
-			temp[i++]=c;
-			break;
-		} else break;
-	} while(1);
-	temp[i]='\0';
+int HashKey(char*K) {//尽量不让他抱团
+	int temp=(K[0]-'a')*32*32+(K[1]-'a')*32+K[2]-'a';
+	temp*=HashLenth;
+	temp/=27482;//26*32*32+26*32+26
 	return temp;
 }
 
-Node Insert(Node h,char*K) {
-	if(!h||strcmp(h->Words,K)>0) {
-		Node temp=(Node)malloc(sizeof(struct node));
-		temp->Next=h;
-//		temp->Number=1;
-		temp->Words=(char*)malloc(sizeof(strlen(K))) ;
-		strcpy(temp->Words,K);
-		return temp;
-	} else if(strcmp(h->Words,K)<0) h->Next=Insert(h->Next,K);
-	return h;
+int Mod(int Num) {
+	while(Num<0)Num+=HashLenth;
+	return Num%HashLenth;
+}
+void Insert(int h ,char*K) {
+	int Key=HashKey(K);
+	int flag;
+	int i;
+	for( i=0; i<=HashLenth/2; i++) {
+		flag=Mod(Key+i*i);
+		if(!Hash[flag])break;
+		else if(!strcmp(Hash[flag]->Word,K)) {
+			Refresh(Hash[flag],h);
+			return ;
+		}
+		flag=Mod(Key-i*i);
+		if(!Hash[flag])break;
+		else if(!strcmp(Hash[flag]->Word,K)) {
+			Refresh(Hash[flag],h);
+			return ;
+		}
+	}
+	if(i>HashLenth/2) {//实践证明平台的词汇量并不多
+		exit(1);//	printf("ERROR:HashLenth is not enouth!\n");
+	}
+//	printf("[NEW]");
+	++Sum[h];//对该文件词汇量+1
+	Hash[flag]=(Node)malloc(sizeof(struct node));
+	Hash[flag]->Word=(char*)malloc(sizeof(char)*strlen(K));
+	strcpy(Hash[flag]->Word,K);
+	Hash[flag]->Times=0;
+	Hash[flag]->Reached[0]=h;
+}
+
+
+char*scan() {
+//	printf("#");
+	static char temp[11];
+	static int Flag_br=0;
+	int i=0;
+	char c;
+	while(1) {
+		c=getchar();
+		switch(c) {
+			case '#' :
+				if(Flag_br==1) {
+					c=getchar();
+					if(c=='\n') {
+						temp[0]='#';
+						temp[1]='\0';
+						return temp;
+					}
+				}
+			default:
+				switch(c) {
+					case 'a'...'z':
+						if(i<10)
+							temp[i++]=c;
+						break;
+					case 'A'...'Z':
+						if(i<10)
+							temp[i++]=c-'A'+'a';
+						break;
+
+					default:
+						if(c=='\n')Flag_br=1;
+						else Flag_br=0;
+
+						temp[i]='\0';
+						if(i>2) {
+//							printf("{%s}",temp);
+							return temp;
+						} else {
+//							printf("{}");
+							return NULL;
+						}
+						break;
+				}
+				break;
+		}
+	}
 }
