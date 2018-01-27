@@ -1,112 +1,148 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#define MAX_Lenth 4400000
-#define Min(a) (((a)>='A'&&(a)<='Z')?((a)+32):(a))
-
-typedef struct node*Node;
+#include <stdio.h>
+#define MAXLENTH 1000007
+/*提交时间	状态	分数	题目	编译器	耗时	用户
+2018/1/27 14:12:56	答案正确	30	7-46	C (gcc)	195 ms	569985011
+测试点	提示	结果	耗时	内存
+0	sample 并列热门；同一微博重复提到的话题只算1次	答案正确	2 ms	144KB
+1	一个话题	答案正确	2 ms	128KB
+2	分词不同，算2个不同的话题；同一微博可包含多个话题	答案正确	1 ms	128KB
+3	最大N；最长微博；最长话题	答案正确	195 ms	1168KB*/
+typedef struct node *Node;
 struct node {
-	char *Topic;
-	int Reached;
+	char* KTitle;//整理后的话题
+	int Times;//提到次数
+	int LastTimeWhoPost;//最近一次提及它的是哪条微博（用于去重）
 };
+void Scan(int);
+int HashKey(char*);
+int Mod(int);
+void Insert(int,char*);
 
+Node Hash[MAXLENTH];//散列存储
+Node Titles[MAXLENTH]; // 建立双索引
+int SumofTitles=0;//话题总数
 
-Node List[MAX_Lenth]= {0};
-
-int  numList=0;
-
-void scan(int);
-void fun();
-int stricmp(const char*a,const char*b) {
-	
-	for(; *a!='\0'; a++,b++) {
-		if(Min(*a)!=Min(*b))break;
-	}
-	
-	return Min(*a)-Min(*b);
-
-}
-int cmp(const void*a,const void*b) {
-	Node x=*(Node*)a;
-	Node y=*(Node*)b;
-	int temp=stricmp(x->Topic,y->Topic);
-	if(temp)return temp;
-	else 	return x->Reached-y->Reached;
-}
 int main() {
 	int n;
 	scanf("%d",&n);
-	while(n--) {
-		scan(n);
+	getchar();
+	for(int i=0; i<n; i++) {
+		Scan(i);
 	}
-	qsort(List,numList,sizeof(Node),cmp);
-//for(int i=0;i<numList;i++)printf("{%s}",List[i]->Topic);
-	fun();
 
+	Node MostTimes=Titles[0];
+	int NumofMost=0;
+	for(int i=1; i<SumofTitles; i++) {
+//		printf("{%s--%d}",Titles[i]->KTitle,Titles[i]->Times);
+		if(Titles[i]->Times>MostTimes->Times) {
+			MostTimes=Titles[i];
+			NumofMost=0;
+		} else if(Titles[i]->Times==MostTimes->Times) {
+			if(strcmp(Titles[i]->KTitle,MostTimes->KTitle)<0) {
+				MostTimes=Titles[i];
+			}
+			++NumofMost;
+		}
+	}
+	if(MostTimes->KTitle[0]>='a'&&MostTimes->KTitle[0]<='z')MostTimes->KTitle[0]+='A'-'a';
+	printf("%s\n%d",MostTimes->KTitle,MostTimes->Times);
+	if(NumofMost) {
+		printf("\nAnd %d more ...",NumofMost);
+	}
 	return 0;
 }
-
-void fun() {
-	Node Hot=List[0];
-	int Most=1;
-	int binglie=0;
-	Node This=List[0];
-	int Num=1;
-	for(int i=1; i<numList; i++) {
-		if(stricmp(This->Topic,List[i]->Topic)) {
-			if(Num==Most) {
-			
-				binglie++;
-			} else if(Num>Most) {
-				binglie=0;
-				Most=Num;
-				Hot=This;
+void Scan(int NumofWeibo) {
+	char temp[141];//每行给出一条英文微博，其长度不超过140个字符
+//	getchar();
+	gets(temp);
+	int Flag_Jin=0;
+	char title[141];
+	int Flag_Space=1;
+//	printf("{S-%s}\n",temp);
+	for(char*i=temp,*j=title; *i!='\0'; i++) {
+		if(Flag_Jin==1) {
+			switch(*i) {
+				case '#':
+					while(*(j-1)==' ')--j;
+					*j='\0';
+					if(strlen(title)>0)//两个连续的#是空话题，不予计数 
+						Insert(NumofWeibo,title);
+					Flag_Jin=0;					
+					j=title;
+					break;
+				case 'a'...'z':
+				case '0'...'9':
+					*j++=*i;
+					Flag_Space=0;
+					break;
+				case 'A'...'Z':
+					*j++=*i-'A'+'a';
+					Flag_Space=0;
+					break;
+				default:
+					if(Flag_Space==0) {
+						*j++=' ';
+						Flag_Space=1;
+					}
+					break;
 			}
-			This=List[i];
-			Num=1;
-		} else if(This->Reached!=List[i]->Reached) {
-			if(strcmp(List[i]->Topic,This->Topic)<0){
-					This=List[i];
-				}else
-				This->Reached=List[i]->Reached;			
-			Num++;
+		} else if(*i=='#') {
+			Flag_Jin=1;
+			Flag_Space=1;
 		}
 	}
-	if(Num>Most) {
-		binglie=0;
-		Most=Num;
-	} else if(Num==Most) {
-		binglie++;
-	}
-	printf("%s\n%d",Hot->Topic,Most);
-	if(binglie)printf("\nAnd %d more ...",binglie);
 }
-
-void scan(int h) {//
-	char weibo[141];
-	getchar();
-	gets(weibo);
-	int len=strlen(weibo);
-	for(int flag=0,index,i=0; i<len; i++) {
-		if(weibo[i]=='#') {
-			if(!flag) {
-				flag=1;
-				index=i;
-				continue;
-			} else {
-				List[numList]=(Node)malloc(sizeof(struct node));
-				List[numList]->Topic=(char*)malloc(sizeof(char)*(i-index));
-				List[numList]->Reached=h;
-				int k=0;//����ǰ40���ַ� 
-				for(int j=index+1; j<i&&k<40; j++) {
-					if((weibo[j]>='A'&&weibo[j]<='Z')||weibo[j]==' '||//weibo[j]+='a'-'A';
-					        (weibo[j]>='a'&&weibo[j]<='z'))//�����ҪҲ���Ա����ո�
-						List[numList]->Topic[k++]=weibo[j];
-				}
-				List[numList++]->Topic[k]='\0';
-				flag=0;
-			}
-
-		}
+int HashKey(char*K) {
+//	printf("&");
+	unsigned int n=0;
+	while(*K) {
+		n+=*K-'a';
+		n<<=5;
+//		printf("(%d)",n);
+		K++;
 	}
+//	printf("*-*");
+	return n;
+}
+int Mod(int n) {
+	while(n<0)n+=MAXLENTH;
+	return n%MAXLENTH;
+}
+void Insert(int NumofWeibo,char*t) {//比较后插入散列表并更新话题原型
+//	printf("{I-%s}",t);
+	int Key=HashKey(t);
+	int i=0,j=0;
+	for( ; i<=MAXLENTH/2; i++) {
+		j=Mod(Key+i);
+		if(Hash[j]) {
+			if(strcmp(t,Hash[j]->KTitle)==0) {
+				if(Hash[j]->LastTimeWhoPost==NumofWeibo)return;
+				++Hash[j]->Times;
+				Hash[j]->LastTimeWhoPost=NumofWeibo;
+//				printf("{add:%s}",Hash[j]->KTitle);
+			}
+		} else break;
+		j=Mod(Key-i);
+		if(Hash[j]) {
+			if(strcmp(t,Hash[j]->KTitle)==0) {
+				if(Hash[j]->LastTimeWhoPost==NumofWeibo)return;
+				++Hash[j]->Times;
+				Hash[j]->LastTimeWhoPost=NumofWeibo;
+//				printf("{add:%s}",Hash[j]->KTitle);
+			}
+		} else break;
+	}
+	if(i>MAXLENTH/2) {
+//		printf("NOT ENOUGH SPACE");
+		exit(1);
+	}
+	Hash[j]=(Node)malloc(sizeof(struct node));
+	Hash[j]->KTitle=(char*)malloc(strlen(t));
+	strcpy(Hash[j]->KTitle,t);
+	Hash[j]->Times=1;
+	Hash[j]->LastTimeWhoPost=NumofWeibo;
+	Titles[SumofTitles++]=Hash[j];//把新加入的元素在哈希表中的地址保存进数组。方便遍历。
+//	printf("{new:%s}",Hash[j]->KTitle);
 }
